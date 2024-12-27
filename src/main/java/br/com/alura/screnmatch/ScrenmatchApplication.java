@@ -18,11 +18,24 @@ public class ScrenmatchApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
+		/**
+		 * 2 - Suponha que decidimos mudar de ideia e utilizar novamente a biblioteca Gson no nosso projeto
+		 * ScreenMatch. Agora que estamos trabalhando com o Maven, os passos para adicionar a biblioteca são
+		 * diferentes do que já foi feito antes. Explique quais passos você iria realizar nesse caso.
+		 */
+
 		ConsumoApi consumoApi = new ConsumoApi();
 		String json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=6585022c");
 		System.out.println(json);
+
+		DadosSerie dados = null;
 		ConverteDados converteDados = new ConverteDados();
-		DadosSerie dados = converteDados.obterDados(json, DadosSerie.class);
+
+		dados = converteDados.obterDadosWithJackson(json, DadosSerie.class);
+		System.out.println(dados);
+
+		dados = null;
+		dados = converteDados.obterDadosWithGson(json, DadosSerie.class);
 		System.out.println(dados);
 	}
 }
