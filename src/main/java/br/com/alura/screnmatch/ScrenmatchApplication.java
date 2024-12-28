@@ -1,8 +1,10 @@
 package br.com.alura.screnmatch;
 
 import br.com.alura.screnmatch.model.DadosSerie;
+import br.com.alura.screnmatch.model.Tarefa;
 import br.com.alura.screnmatch.service.ConsumoApi;
 import br.com.alura.screnmatch.service.ConverteDados;
+import br.com.alura.screnmatch.service.PersisteDados;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,24 +20,21 @@ public class ScrenmatchApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		/**
-		 * 2 - Suponha que decidimos mudar de ideia e utilizar novamente a biblioteca Gson no nosso projeto
-		 * ScreenMatch. Agora que estamos trabalhando com o Maven, os passos para adicionar a biblioteca são
-		 * diferentes do que já foi feito antes. Explique quais passos você iria realizar nesse caso.
-		 */
-
 		ConsumoApi consumoApi = new ConsumoApi();
 		String json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=6585022c");
 		System.out.println(json);
-
-		DadosSerie dados = null;
 		ConverteDados converteDados = new ConverteDados();
-
-		dados = converteDados.obterDadosWithJackson(json, DadosSerie.class);
+		DadosSerie dados = converteDados.obterDados(json, DadosSerie.class);
 		System.out.println(dados);
 
-		dados = null;
-		dados = converteDados.obterDadosWithGson(json, DadosSerie.class);
-		System.out.println(dados);
+		Tarefa tarefa = new Tarefa(
+				"Atividade 4: serialização de um objeto",
+				true,
+				"Carlos");
+		String tarefaJson = converteDados.obterJson(tarefa);
+		System.out.println(tarefaJson);
+		PersisteDados persisteDados = new PersisteDados();
+		persisteDados.gravaJsonEmArquivo(tarefaJson, "tarefa.json");
+
 	}
 }

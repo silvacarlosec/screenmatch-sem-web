@@ -10,7 +10,7 @@ public class ConverteDados implements IConverteDados {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public <T> T obterDadosWithJackson(String json, Class<T> classe) {
+    public <T> T obterDados(String json, Class<T> classe) {
         try {
             return mapper.readValue(json, classe);
         } catch (JsonProcessingException e) {
@@ -18,14 +18,25 @@ public class ConverteDados implements IConverteDados {
         }
     }
 
-    private Gson mapper2 = new Gson();
+    @Override
+    public String obterJson(Object dados) {
+        try {
+            return mapper.writeValueAsString(dados);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*
+    private Gson gson = new Gson();
 
     @Override
-    public <T> T obterDadosWithGson(String json, Class<T> classe) {
+    public <T> T obterDados(String json, Class<T> classe) {
         try {
-            return mapper2.fromJson(json, classe);
+            return gson.fromJson(json, classe);
         } catch (JsonSyntaxException e) {
             throw new RuntimeException(e);
         }
     }
+     */
 }
