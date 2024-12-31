@@ -1,10 +1,14 @@
 package br.com.alura.screnmatch.service;
 
+import br.com.alura.screnmatch.model.Tarefa;
+
+import java.io.File;
+
 public interface IConverteDados {
 
-    <T> T obterDados(String json, Class<T> classe);
-    //<T> T obterDadosWithJackson(String json, Class<T> classe);
-    //<T> T obterDadosWithGson(String json, Class<T> classe);
-    String obterJson(Object dados);
+    <T> T desserializa(String json, Class<T> classe);
+    <T> T desserializa(File json, Class<T> classe);
+    <T> String serializaEmString(T objeto);
+    <T> File serializaEmArquivo(String caminho, T objeto);
 
 }

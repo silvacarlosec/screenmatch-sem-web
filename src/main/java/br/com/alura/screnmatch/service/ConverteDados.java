@@ -2,15 +2,16 @@ package br.com.alura.screnmatch.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ConverteDados implements IConverteDados {
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public <T> T obterDados(String json, Class<T> classe) {
+    public <T> T desserializa(String json, Class<T> classe) {
         try {
             return mapper.readValue(json, classe);
         } catch (JsonProcessingException e) {
@@ -19,19 +20,39 @@ public class ConverteDados implements IConverteDados {
     }
 
     @Override
-    public String obterJson(Object dados) {
+    public <T> T desserializa(File json, Class<T> classe) {
         try {
-            return mapper.writeValueAsString(dados);
+            return mapper.readValue(json, classe);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> String serializaEmString(T objeto) {
+        try {
+            return mapper.writeValueAsString(objeto);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /*
+    @Override
+    public <T> File serializaEmArquivo(String caminho, T objeto) {
+        File file = new File(caminho);
+        try {
+            mapper.writeValue(file, objeto);
+            return file;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /* // Implementação alternativa, utilizando a biblioteca Gson
     private Gson gson = new Gson();
 
     @Override
-    public <T> T obterDados(String json, Class<T> classe) {
+    public <T> T desserializa(String json, Class<T> classe) {
         try {
             return gson.fromJson(json, classe);
         } catch (JsonSyntaxException e) {
